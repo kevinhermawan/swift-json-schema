@@ -39,7 +39,14 @@ public class JSONSchema: Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(SchemaType.self, forKey: .type)
+        
+        if container.contains(.enum) {
+            type = .enum
+            enumSchema = try EnumSchema(from: decoder)
+        } else {
+            type = try container.decode(SchemaType.self, forKey: .type)
+        }
+        
         description = try container.decodeIfPresent(String.self, forKey: .description)
         
         switch type {
@@ -64,7 +71,11 @@ public class JSONSchema: Codable {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
+        
+        if type != .enum {
+            try container.encode(type, forKey: .type)
+        }
+        
         try container.encodeIfPresent(description, forKey: .description)
         
         switch type {
@@ -88,6 +99,6 @@ public class JSONSchema: Codable {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case type, description
+        case type, description, `enum`
     }
 }

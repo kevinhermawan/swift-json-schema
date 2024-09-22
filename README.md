@@ -12,7 +12,7 @@ You can add `JSONSchema` as a dependency to your project using Swift Package Man
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/kevinhermawan/swift-json-schema.git`", .upToNextMajor(from: "1.0.0"))
+    .package(url: "https://github.com/kevinhermawan/swift-json-schema.git", .upToNextMajor(from: "1.0.0"))
 ],
 targets: [
     .target(
