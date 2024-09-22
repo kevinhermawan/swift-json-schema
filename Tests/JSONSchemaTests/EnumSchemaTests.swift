@@ -118,7 +118,7 @@ final class EnumSchemaTests: XCTestCase {
         let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
         
         XCTAssertNotNil(jsonObject)
-        XCTAssertEqual(jsonObject?["type"] as? String, "enum")
+        XCTAssertNil(jsonObject?["type"], "Type should be omitted for enum")
         XCTAssertEqual(jsonObject?["description"] as? String, "A test enum")
         
         let enumValues = jsonObject?["enum"] as? [Any]
