@@ -1,6 +1,6 @@
 # JSONSchema
 
-A convenient way to define JSON Schema definitions in Swift.
+A convenient way to define JSON Schema in Swift.
 
 ## Overview
 
@@ -85,8 +85,8 @@ let statusSchema = JSONSchema.enum(
 let userSchema = JSONSchema.object(
     description: "User object",
     properties: [
-        "id": JSONSchema.integer(minimum: 1),
-        "name": JSONSchema.string(minLength: 1),
+        "id": .integer(minimum: 1),
+        "name": .string(minLength: 1),
         "email": emailSchema,
         "age": ageSchema,
         "status": statusSchema
@@ -100,7 +100,7 @@ let userSchema = JSONSchema.object(
 ```swift
 let tagsSchema = JSONSchema.array(
     description: "User's tags",
-    items: JSONSchema.string(minLength: 1),
+    items: .string(minLength: 1),
     minItems: 1,
     maxItems: 10,
     uniqueItems: true
