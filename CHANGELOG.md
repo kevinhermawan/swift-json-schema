@@ -1,3 +1,8 @@
+# 1.0.3
+
+- feat: adds JSON string initialization by @kevinhermawan in https://github.com/kevinhermawan/swift-json-schema/pull/4
+- chore: adds SPI badges by @kevinhermawan in https://github.com/kevinhermawan/swift-json-schema/pull/5
+
 # 1.0.2
 
 - docs: improves usage section by @kevinhermawan in https://github.com/kevinhermawan/swift-json-schema/pull/2
