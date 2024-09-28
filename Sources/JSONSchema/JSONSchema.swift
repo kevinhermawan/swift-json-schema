@@ -101,4 +101,29 @@ public class JSONSchema: Codable {
     private enum CodingKeys: String, CodingKey {
         case type, description, `enum`
     }
+    
+    /// Creates a new instance of ``JSONSchema`` from a JSON string.
+    public convenience init(jsonString: String) throws {
+        guard let data = jsonString.data(using: .utf8) else {
+            throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "Invalid UTF-8 string"))
+        }
+        
+        let decoder = JSONDecoder()
+        let decodedData = try decoder.decode(JSONSchema.self, from: data)
+        
+        self.init(from: decodedData)
+    }
+    
+    private init(from decodedSchema: JSONSchema) {
+        self.type = decodedSchema.type
+        self.description = decodedSchema.description
+        self.arraySchema = decodedSchema.arraySchema
+        self.booleanSchema = decodedSchema.booleanSchema
+        self.enumSchema = decodedSchema.enumSchema
+        self.integerSchema = decodedSchema.integerSchema
+        self.nullSchema = decodedSchema.nullSchema
+        self.numberSchema = decodedSchema.numberSchema
+        self.objectSchema = decodedSchema.objectSchema
+        self.stringSchema = decodedSchema.stringSchema
+    }
 }
