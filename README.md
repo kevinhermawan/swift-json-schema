@@ -132,6 +132,67 @@ let productSchema = JSONSchema.object(
 )
 ```
 
+You can also create the same schema using a JSON string:
+
+```swift
+do {
+    let jsonString = """
+    {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "integer",
+                "minimum": 1
+            },
+            "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+            },
+            "price": {
+                "type": "number",
+                "minimum": 0.01,
+                "exclusiveMaximum": 1000000
+            },
+            "tags": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "uniqueItems": true
+            },
+            "settings": {
+                "type": "object",
+                "properties": {
+                    "inStock": {
+                        "type": "boolean"
+                    },
+                    "size": {
+                        "type": "string",
+                        "enum": ["small", "medium", "large"]
+                    }
+                }
+            }
+        },
+        "required": ["id", "name", "price"]
+    }
+    """
+
+    let productSchema = try JSONSchema(jsonString: jsonString)
+} catch {
+    print(String(describing: error))
+}
+```
+
+## Donations
+
+If you find `JSONSchema` helpful and would like to support its development, consider making a donation. Your contribution helps maintain the project and develop new features.
+
+- [GitHub Sponsors](https://github.com/sponsors/kevinhermawan)
+- [Buy Me a Coffee](https://buymeacoffee.com/kevinhermawan)
+
+Your support is greatly appreciated!
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request if you have any suggestions or improvements.

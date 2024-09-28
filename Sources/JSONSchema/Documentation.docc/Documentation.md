@@ -104,3 +104,55 @@ let productSchema = JSONSchema.object(
     required: ["id", "name", "price"]
 )
 ```
+
+You can also create the same schema using a JSON string:
+
+```swift
+do {
+    let jsonString = """
+    {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "integer",
+                "minimum": 1
+            },
+            "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+            },
+            "price": {
+                "type": "number",
+                "minimum": 0.01,
+                "exclusiveMaximum": 1000000
+            },
+            "tags": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "uniqueItems": true
+            },
+            "settings": {
+                "type": "object",
+                "properties": {
+                    "inStock": {
+                        "type": "boolean"
+                    },
+                    "size": {
+                        "type": "string",
+                        "enum": ["small", "medium", "large"]
+                    }
+                }
+            }
+        },
+        "required": ["id", "name", "price"]
+    }
+    """
+
+    let productSchema = try JSONSchema(jsonString: jsonString)
+} catch {
+    print(String(describing: error))
+}
+```
