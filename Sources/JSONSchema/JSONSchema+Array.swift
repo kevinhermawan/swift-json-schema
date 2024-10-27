@@ -9,7 +9,7 @@ import Foundation
 
 public extension JSONSchema {
     /// A structure that represents the schema for an array type in JSON Schema.
-    struct ArraySchema: Codable {
+    struct ArraySchema: Codable, Sendable {
         /// The schema for the items in the array. [10.3.1.2](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-00#rfc.section.10.3.1.2)
         public let items: JSONSchema?
         
@@ -44,15 +44,16 @@ public extension JSONSchema {
         maxItems: Int? = nil,
         uniqueItems: Bool? = nil
     ) -> JSONSchema {
-        let schema = JSONSchema(type: .array, description: description)
-        schema.arraySchema = ArraySchema(
-            items: items,
-            prefixItems: prefixItems,
-            minItems: minItems,
-            maxItems: maxItems,
-            uniqueItems: uniqueItems
+        JSONSchema(
+            type: .array,
+            description: description,
+            arraySchema: ArraySchema(
+                items: items,
+                prefixItems: prefixItems,
+                minItems: minItems,
+                maxItems: maxItems,
+                uniqueItems: uniqueItems
+            )
         )
-        
-        return schema
     }
 }

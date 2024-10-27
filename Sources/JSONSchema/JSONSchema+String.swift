@@ -9,7 +9,7 @@ import Foundation
 
 public extension JSONSchema {
     /// A structure that represents the schema for a string type in JSON Schema.
-    struct StringSchema: Codable {
+    struct StringSchema: Codable, Sendable {
         /// The minimum length of the string. [6.3.2](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-validation-00#rfc.section.6.3.2)
         public let minLength: Int?
         
@@ -34,9 +34,14 @@ public extension JSONSchema {
         maxLength: Int? = nil,
         pattern: String? = nil
     ) -> JSONSchema {
-        let schema = JSONSchema(type: .string, description: description)
-        schema.stringSchema = StringSchema(minLength: minLength, maxLength: maxLength, pattern: pattern)
-        
-        return schema
+        JSONSchema(
+            type: .string,
+            description: description,
+            stringSchema: StringSchema(
+                minLength: minLength,
+                maxLength: maxLength,
+                pattern: pattern
+            )
+        )
     }
 }

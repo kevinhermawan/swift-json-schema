@@ -9,7 +9,7 @@ import Foundation
 
 public extension JSONSchema {
     /// A structure that represents the schema for a number type in JSON Schema.
-    struct NumberSchema: Codable {
+    struct NumberSchema: Codable, Sendable {
         /// A value that the number must be a multiple of. [6.2.1](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-validation-00#rfc.section.6.2.1)
         public let multipleOf: Double?
         
@@ -44,15 +44,16 @@ public extension JSONSchema {
         exclusiveMinimum: Double? = nil,
         exclusiveMaximum: Double? = nil
     ) -> JSONSchema {
-        let schema = JSONSchema(type: .number, description: description)
-        schema.numberSchema = NumberSchema(
-            multipleOf: multipleOf,
-            minimum: minimum,
-            maximum: maximum,
-            exclusiveMinimum: exclusiveMinimum,
-            exclusiveMaximum: exclusiveMaximum
+        JSONSchema(
+            type: .number,
+            description: description,
+            numberSchema: NumberSchema(
+                multipleOf: multipleOf,
+                minimum: minimum,
+                maximum: maximum,
+                exclusiveMinimum: exclusiveMinimum,
+                exclusiveMaximum: exclusiveMaximum
+            )
         )
-        
-        return schema
     }
 }

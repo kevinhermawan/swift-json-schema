@@ -9,12 +9,12 @@ import Foundation
 
 public extension JSONSchema {
     /// A structure that represents the schema for an enum type in JSON Schema.
-    struct EnumSchema: Codable, Equatable {
+    struct EnumSchema: Codable, Equatable, Sendable {
         /// The array of possible values for this enum schema.
         public let values: [Value]
         
         /// An enum that represents the possible values in an enum schema.
-        public enum Value: Codable, Equatable {
+        public enum Value: Codable, Equatable, Sendable {
             /// A string value.
             case string(String)
             /// A number value (represented as a `Double`).
@@ -89,9 +89,12 @@ public extension JSONSchema {
     ///   - values: An array of possible values for this enum schema.
     /// - Returns: A new ``JSONSchema`` instance that represents an enum schema.
     static func `enum`(description: String? = nil, values: [EnumSchema.Value]) -> JSONSchema {
-        let schema = JSONSchema(type: .enum, description: description)
-        schema.enumSchema = EnumSchema(values: values)
-        
-        return schema
+        JSONSchema(
+            type: .enum,
+            description: description,
+            enumSchema: EnumSchema(
+                values: values
+            )
+        )
     }
 }

@@ -8,8 +8,8 @@
 import Foundation
 
 /// A class that represents a JSON Schema definition.
-public class JSONSchema: Codable {
-    internal enum SchemaType: String, Codable {
+public final class JSONSchema: Codable, Sendable {
+    enum SchemaType: String, Codable, Sendable {
         case array
         case boolean
         case `enum`
@@ -20,52 +20,133 @@ public class JSONSchema: Codable {
         case string
     }
     
-    internal let type: SchemaType
-    internal let description: String?
+    let type: SchemaType
+    let description: String?
     
-    internal var arraySchema: ArraySchema?
-    internal var booleanSchema: BooleanSchema?
-    internal var enumSchema: EnumSchema?
-    internal var integerSchema: IntegerSchema?
-    internal var nullSchema: NullSchema?
-    internal var numberSchema: NumberSchema?
-    internal var objectSchema: ObjectSchema?
-    internal var stringSchema: StringSchema?
+    let arraySchema: ArraySchema?
+    let booleanSchema: BooleanSchema?
+    let enumSchema: EnumSchema?
+    let integerSchema: IntegerSchema?
+    let nullSchema: NullSchema?
+    let numberSchema: NumberSchema?
+    let objectSchema: ObjectSchema?
+    let stringSchema: StringSchema?
     
-    internal init(type: SchemaType, description: String? = nil) {
+    init(
+        type: SchemaType,
+        description: String? = nil,
+        arraySchema: ArraySchema? = nil,
+        booleanSchema: BooleanSchema? = nil,
+        enumSchema: EnumSchema? = nil,
+        integerSchema: IntegerSchema? = nil,
+        nullSchema: NullSchema? = nil,
+        numberSchema: NumberSchema? = nil,
+        objectSchema: ObjectSchema? = nil,
+        stringSchema: StringSchema? = nil
+    ) {
         self.type = type
         self.description = description
+        self.arraySchema = arraySchema
+        self.booleanSchema = booleanSchema
+        self.enumSchema = enumSchema
+        self.integerSchema = integerSchema
+        self.nullSchema = nullSchema
+        self.numberSchema = numberSchema
+        self.objectSchema = objectSchema
+        self.stringSchema = stringSchema
     }
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
+        let tempType: SchemaType
+        let tempEnumSchema: EnumSchema?
+        
         if container.contains(.enum) {
-            type = .enum
-            enumSchema = try EnumSchema(from: decoder)
+            tempType = .enum
+            tempEnumSchema = try EnumSchema(from: decoder)
         } else {
-            type = try container.decode(SchemaType.self, forKey: .type)
+            tempType = try container.decode(SchemaType.self, forKey: .type)
+            tempEnumSchema = nil
         }
         
-        description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.type = tempType
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
         
-        switch type {
+        // Initialize all schemas based on the type
+        switch tempType {
         case .array:
-            arraySchema = try ArraySchema(from: decoder)
+            self.arraySchema = try ArraySchema(from: decoder)
+            self.booleanSchema = nil
+            self.enumSchema = nil
+            self.integerSchema = nil
+            self.nullSchema = nil
+            self.numberSchema = nil
+            self.objectSchema = nil
+            self.stringSchema = nil
         case .boolean:
-            booleanSchema = try BooleanSchema(from: decoder)
+            self.arraySchema = nil
+            self.booleanSchema = try BooleanSchema(from: decoder)
+            self.enumSchema = nil
+            self.integerSchema = nil
+            self.nullSchema = nil
+            self.numberSchema = nil
+            self.objectSchema = nil
+            self.stringSchema = nil
         case .enum:
-            enumSchema = try EnumSchema(from: decoder)
+            self.arraySchema = nil
+            self.booleanSchema = nil
+            self.enumSchema = tempEnumSchema
+            self.integerSchema = nil
+            self.nullSchema = nil
+            self.numberSchema = nil
+            self.objectSchema = nil
+            self.stringSchema = nil
         case .integer:
-            integerSchema = try IntegerSchema(from: decoder)
+            self.arraySchema = nil
+            self.booleanSchema = nil
+            self.enumSchema = nil
+            self.integerSchema = try IntegerSchema(from: decoder)
+            self.nullSchema = nil
+            self.numberSchema = nil
+            self.objectSchema = nil
+            self.stringSchema = nil
         case .null:
-            nullSchema = try NullSchema(from: decoder)
+            self.arraySchema = nil
+            self.booleanSchema = nil
+            self.enumSchema = nil
+            self.integerSchema = nil
+            self.nullSchema = try NullSchema(from: decoder)
+            self.numberSchema = nil
+            self.objectSchema = nil
+            self.stringSchema = nil
         case .number:
-            numberSchema = try NumberSchema(from: decoder)
+            self.arraySchema = nil
+            self.booleanSchema = nil
+            self.enumSchema = nil
+            self.integerSchema = nil
+            self.nullSchema = nil
+            self.numberSchema = try NumberSchema(from: decoder)
+            self.objectSchema = nil
+            self.stringSchema = nil
         case .object:
-            objectSchema = try ObjectSchema(from: decoder)
+            self.arraySchema = nil
+            self.booleanSchema = nil
+            self.enumSchema = nil
+            self.integerSchema = nil
+            self.nullSchema = nil
+            self.numberSchema = nil
+            self.objectSchema = try ObjectSchema(from: decoder)
+            self.stringSchema = nil
         case .string:
-            stringSchema = try StringSchema(from: decoder)
+            self.arraySchema = nil
+            self.booleanSchema = nil
+            self.enumSchema = nil
+            self.integerSchema = nil
+            self.nullSchema = nil
+            self.numberSchema = nil
+            self.objectSchema = nil
+            self.stringSchema = try StringSchema(from: decoder)
         }
     }
     

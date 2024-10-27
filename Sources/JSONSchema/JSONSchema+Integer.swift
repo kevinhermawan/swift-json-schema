@@ -9,7 +9,7 @@ import Foundation
 
 public extension JSONSchema {
     /// A structure that represents the schema for an integer type in JSON Schema.
-    struct IntegerSchema: Codable {
+    struct IntegerSchema: Codable, Sendable {
         /// A value that the integer must be a multiple of. [6.2.1](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-validation-00#rfc.section.6.2.1)
         public let multipleOf: Int?
         
@@ -44,15 +44,16 @@ public extension JSONSchema {
         exclusiveMinimum: Int? = nil,
         exclusiveMaximum: Int? = nil
     ) -> JSONSchema {
-        let schema = JSONSchema(type: .integer, description: description)
-        schema.integerSchema = IntegerSchema(
-            multipleOf: multipleOf,
-            minimum: minimum,
-            maximum: maximum,
-            exclusiveMinimum: exclusiveMinimum,
-            exclusiveMaximum: exclusiveMaximum
+        JSONSchema(
+            type: .integer,
+            description: description,
+            integerSchema: IntegerSchema(
+                multipleOf: multipleOf,
+                minimum: minimum,
+                maximum: maximum,
+                exclusiveMinimum: exclusiveMinimum,
+                exclusiveMaximum: exclusiveMaximum
+            )
         )
-        
-        return schema
     }
 }
