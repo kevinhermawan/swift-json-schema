@@ -186,14 +186,19 @@ do {
 }
 ```
 
-## Donations
+## Related Packages
+
+- [swift-llm-chat-anthropic](https://github.com/kevinhermawan/swift-llm-chat-anthropic)
+- [swift-llm-chat-openai](https://github.com/kevinhermawan/swift-llm-chat-openai)
+
+## Support
 
 If you find `JSONSchema` helpful and would like to support its development, consider making a donation. Your contribution helps maintain the project and develop new features.
 
 - [GitHub Sponsors](https://github.com/sponsors/kevinhermawan)
 - [Buy Me a Coffee](https://buymeacoffee.com/kevinhermawan)
 
-Your support is greatly appreciated!
+Your support is greatly appreciated! ❤️
 
 ## Contributing
 
