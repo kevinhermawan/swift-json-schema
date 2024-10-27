@@ -156,3 +156,8 @@ do {
     print(String(describing: error))
 }
 ```
+
+## Related Packages
+
+- [swift-llm-chat-anthropic](https://github.com/kevinhermawan/swift-llm-chat-anthropic)
+- [swift-llm-chat-openai](https://github.com/kevinhermawan/swift-llm-chat-openai)
