@@ -89,12 +89,20 @@ public extension JSONSchema {
     ///   - values: An array of possible values for this enum schema.
     /// - Returns: A new ``JSONSchema`` instance that represents an enum schema.
     static func `enum`(description: String? = nil, values: [EnumSchema.Value]) -> JSONSchema {
-        JSONSchema(
-            type: .enum,
+        let inferredType: SchemaType = {
+            guard let first = values.first else { return .string }
+            switch first {
+            case .string(_):  return .string
+            case .number(_):  return .number
+            case .integer(_): return .integer
+            case .boolean(_): return .boolean
+            case .null:       return .null
+            }
+        }()
+        return JSONSchema(
+            type: inferredType,
             description: description,
-            enumSchema: EnumSchema(
-                values: values
-            )
+            enumSchema: EnumSchema(values: values)
         )
     }
 }

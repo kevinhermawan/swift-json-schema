@@ -8,8 +8,19 @@
 import Foundation
 
 /// A class that represents a JSON Schema definition.
+///
+/// `JSONSchema` is a flexible representation of a JSON Schema. It supports multiple schema types,
+/// including arrays, booleans, enums, integers, nulls, numbers, objects, and strings. The schema
+/// includes detailed metadata and type-specific information.
+///
+/// ## Features
+/// - Supports various schema types.
+/// - Provides detailed descriptions for schema elements.
+/// - Implements `Codable` and `Sendable` for serialization and concurrency safety.
 public final class JSONSchema: Codable, Sendable {
-    enum SchemaType: String, Codable, Sendable {
+    
+    /// Enumeration of the supported JSON Schema types.
+    public enum SchemaType: String, Codable, Sendable {
         case array
         case boolean
         case `enum`
@@ -20,17 +31,20 @@ public final class JSONSchema: Codable, Sendable {
         case string
     }
     
-    let type: SchemaType
-    let description: String?
+    /// The type of the schema.
+    public let type: SchemaType
     
-    let arraySchema: ArraySchema?
-    let booleanSchema: BooleanSchema?
-    let enumSchema: EnumSchema?
-    let integerSchema: IntegerSchema?
-    let nullSchema: NullSchema?
-    let numberSchema: NumberSchema?
-    let objectSchema: ObjectSchema?
-    let stringSchema: StringSchema?
+    /// An optional description providing additional information about the schema.
+    public let description: String?
+    
+    public let arraySchema: ArraySchema?
+    public let booleanSchema: BooleanSchema?
+    public let enumSchema: EnumSchema?
+    public let integerSchema: IntegerSchema?
+    public let nullSchema: NullSchema?
+    public let numberSchema: NumberSchema?
+    public let objectSchema: ObjectSchema?
+    public let stringSchema: StringSchema?
     
     init(
         type: SchemaType,
@@ -153,9 +167,8 @@ public final class JSONSchema: Codable, Sendable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        if type != .enum {
-            try container.encode(type, forKey: .type)
-        }
+        // Always encode the type, including for enum
+        try container.encode(type, forKey: .type)
         
         try container.encodeIfPresent(description, forKey: .description)
         
