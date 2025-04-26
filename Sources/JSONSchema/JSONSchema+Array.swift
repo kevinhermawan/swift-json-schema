@@ -10,6 +10,8 @@ import Foundation
 public extension JSONSchema {
     /// A structure that represents the schema for an array type in JSON Schema.
     struct ArraySchema: Codable, Sendable {
+        /// The title of the array schema. [10.3.1.2](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-00#rfc.section.10.3.1.2)
+        public let title: String?
         /// The schema for the items in the array. [10.3.1.2](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-00#rfc.section.10.3.1.2)
         public let items: JSONSchema?
         
@@ -37,6 +39,7 @@ public extension JSONSchema {
     ///   - uniqueItems: If true, all items in the array must be unique. [6.4.3](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-validation-00#rfc.section.6.4.3)
     /// - Returns: A new ``JSONSchema`` instance that represents an array schema.
     static func array(
+        title: String? = nil,
         description: String? = nil,
         items: JSONSchema? = nil,
         prefixItems: [JSONSchema]? = nil,
@@ -48,6 +51,7 @@ public extension JSONSchema {
             type: .array,
             description: description,
             arraySchema: ArraySchema(
+                title: title,
                 items: items,
                 prefixItems: prefixItems,
                 minItems: minItems,
